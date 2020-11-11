@@ -1,8 +1,10 @@
-﻿using ModelCrm.CrmDbContext;
+﻿using Microsoft.EntityFrameworkCore;
+using ModelCrm.CrmDbContext;
 using ModelCrm.Models;
 using ModelCrm.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ModelCrm.Services
@@ -17,6 +19,7 @@ namespace ModelCrm.Services
              Name=productOptions.Name,
              Price= productOptions.Price,
              Quantity=productOptions.Quantity};
+
             dbContext.Products.Add(product);
             dbContext.SaveChanges();
 
@@ -25,22 +28,34 @@ namespace ModelCrm.Services
 
         public bool DeleteProduct(int id)
         {
-            throw new NotImplementedException();
+            Product  product= dbContext.Products.Find(id);
+            if (product == null) return false;
+            dbContext.Products.Remove(product);
+            return true;
         }
 
         public List<Product> GetAllProduct()
         {
-            throw new NotImplementedException();
+            return dbContext.Products.ToList();
         }
 
         public Product GetProductById(int id)
         {
-            throw new NotImplementedException();
+            return dbContext.Products.Find(id);
         }
 
         public Product UpdateProduct(ProductOptions productOption, int id)
         {
-            throw new NotImplementedException();
+            Product product = dbContext.Products.Find(id);
+            product.Code = productOption.Code;
+            product.Description = productOption.Description;
+            product.Name = productOption.Name;
+            product.Price = productOption.Price;
+            product.Quantity = productOption.Quantity;
+
+            dbContext.SaveChanges();
+
+            return product;
         }
     }
 }
