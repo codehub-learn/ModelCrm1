@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ModelCrm.Services
 {
-    public interface IProductCrud
+    public interface IProductService
     {
         Product CreateProduct(ProductOptions productOptions);
         Product GetProductById(int id);

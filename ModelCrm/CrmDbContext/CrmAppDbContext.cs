@@ -35,8 +35,13 @@ namespace ModelCrm.CrmDbContext
         protected override void OnConfiguring
             (DbContextOptionsBuilder optionsBuilder)
         {
+            base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseSqlServer(connectionString);
         }
-
+        public CrmAppDbContext(DbContextOptions<CrmAppDbContext> options)
+               : base(options)
+        { }
+        public CrmAppDbContext()
+        { }
     }
 }

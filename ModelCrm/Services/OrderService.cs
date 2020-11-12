@@ -1,49 +1,50 @@
-﻿using ModelCrm.CrmDbContext;
+﻿using Microsoft.EntityFrameworkCore;
+using ModelCrm.CrmDbContext;
 using ModelCrm.Models;
 using ModelCrm.Options;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
+using System.Linq;
 
 namespace ModelCrm.Services
 {
     public class OrderService : IOrderService
     {
-        private CrmAppDbContext dbContext = new CrmAppDbContext();
+        private readonly CrmAppDbContext dbContext = new CrmAppDbContext();
 
         public OrderOption CreateOrder(CustomerOptions customerOpt)
         {
-            if(customerOpt== null)return null;
+            if (customerOpt == null) return null;
             Customer customer = dbContext.Customers.Find(customerOpt.Id);
             if (customer == null) return null;
-
-            Order order = new Order { Customer= customer };
-
+            Order order = new Order { Customer = customer };
             dbContext.Orders.Add(order);
             dbContext.SaveChanges();
-
             OrderOption orderOption = new OrderOption
-            { CustomerName = customer.FirstName + " " + customer.LastName,
-             Id =order.Id 
+            {
+                CustomerName = customer.FirstName + " " + customer.LastName,
+                Id = order.Id
             };
-
             return orderOption;
         }
 
-            public OrderOption GetOrder(int orderId)
+        public OrderOption GetOrder(int orderId)
         {
-             Order order = dbContext.Orders.Find(orderId);
+            Order order = dbContext.Orders.Include(o => o.Customer).FirstOrDefault(x => x.Id == orderId);
             Customer customer = dbContext.Customers.Find(order.Customer.Id);
+
             List<int> products = new List<int>();
-           /*** to do**/
+            List<OrderProduct> orderProducts = dbContext.OrderProducts
+                .Include(op => op.Product)
+                .Where(op => op.Order.Equals(order)).ToList();
+
+            orderProducts.ForEach(op => products.Add(op.Product.Id));
 
             OrderOption orderOption = new OrderOption
             {
                 CustomerName = customer.FirstName + " " + customer.LastName,
                 Id = order.Id,
-                 Products = products
+                Products = products
             };
 
             return orderOption;
@@ -62,6 +63,5 @@ namespace ModelCrm.Services
             dbContext.SaveChanges();
             return GetOrder(orderId);
         }
-       
     }
 }

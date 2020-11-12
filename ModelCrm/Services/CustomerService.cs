@@ -8,7 +8,7 @@ using System.Text;
 
 namespace ModelCrm.Services
 {
-    public class CustomerCrud : ICustomerCrude
+    public class CustomerService : ICustomerService
     {
         private CrmAppDbContext dbContext = new CrmAppDbContext();
 
@@ -31,8 +31,6 @@ namespace ModelCrm.Services
             dbContext.SaveChanges();
             return customer;
         }
-
-   
 
         public List<Customer> GetAllCustomers()
         {

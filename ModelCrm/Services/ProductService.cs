@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ModelCrm.Services
 {
-    public class ProductCrud : IProductCrud
+    public class ProductService : IProductService
     {
         private CrmAppDbContext dbContext = new CrmAppDbContext();
         public Product CreateProduct(ProductOptions productOptions)

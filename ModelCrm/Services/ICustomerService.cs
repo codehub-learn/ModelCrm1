@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ModelCrm.Services
 {
-   public interface ICustomerCrude
+   public interface ICustomerService
     {
         Customer CreateCustomer(CustomerOptions customerOptions);
         Customer GetCustomerById(int id);

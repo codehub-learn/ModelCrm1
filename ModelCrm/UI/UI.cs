@@ -9,7 +9,7 @@ namespace ModelCrm.UI
 {
     public class Ui 
     {
-        private CustomerCrud custCrud = new CustomerCrud();
+        private CustomerService custCrud = new CustomerService();
 
         public void io()
         {
